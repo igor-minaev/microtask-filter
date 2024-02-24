@@ -1,5 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
+import {Button} from './Button';
+import {NewComponent} from './NewComponent';
+
+export type FilterValuesType = 'All' | 'Dollars' | 'RUBLS'
 
 function App() {
     const [money, setMoney] = useState([
@@ -12,22 +16,26 @@ function App() {
         {banknots: 'Dollars', value: 50, number: ' x1234567890'},
         {banknots: 'RUBLS', value: 50, number: ' v1234567890'},
     ])
-    const mappedMoney = money.map(m => {
-        return (
-            <li key={m.number}>
-                <span>{m.banknots}</span>
-                <span>{m.value}</span>
-                <span>{m.number}</span>
-            </li>
-        )
-    })
+
+    const [filter, setFilter] = useState<FilterValuesType>('All')
+
+    let currentMoney = money
+    if (filter === 'Dollars') {
+        currentMoney = money.filter(m => m.banknots === 'Dollars')
+    }
+    if (filter === 'RUBLS') {
+        currentMoney = money.filter(m => m.banknots === 'RUBLS')
+    }
+
+    const onClickFilterHandler = (buttonName: FilterValuesType) => {
+        setFilter(buttonName)
+    }
     return (
         <div className="App">
-            <ul>
-
-            </ul>
+            <NewComponent money={currentMoney} onClickFilterHandler={onClickFilterHandler}/>
         </div>
-    );
+    )
+        ;
 }
 
 export default App;
